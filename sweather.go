@@ -2,19 +2,23 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"strings"
 	"text/template"
 )
 
 const port = 8000
 
+var env = EnvironmentVariables{FilePath: "./.env"}
+
 type State struct {
-	Name  string
-	Image string
+	Name      string
+	ImageName string
 }
 
-var Alaska State = State{Name: "Alaska", Image: "alaska.jpg"}
+var Alaska State = State{Name: "Alaska", ImageName: "alaska.jpg"}
 
 func ReadUserIP(r *http.Request) string {
 	IPAddress := r.Header.Get("X-Real-Ip")
@@ -24,12 +28,38 @@ func ReadUserIP(r *http.Request) string {
 	if IPAddress == "" {
 		IPAddress = r.RemoteAddr
 	}
+
+	IPAddress = strings.Split(IPAddress, ":")[0]
+
 	return IPAddress
 }
 
-// func GetLatLong(ipaddy string) (float64, float64) {
+// Makes a request to the Abstract geolocation api to get the user's latitude and longitude
+func RequestLatLong(ipaddy string) (float64, float64) {
 
-// }
+	response, err := http.Get(
+		fmt.Sprintf("%s?api_key=%s&ip_address=%s",
+			env.GetString("ABSTRACT_GEOLOCATION_URL"),
+			env.GetString("ABSTRACT_GEOLOCATION_KEY"),
+			ipaddy,
+		),
+	)
+
+	if err != nil {
+		log.Print("Failed to obtain user's lat/long\n ", err)
+		return 0, 0
+	}
+	defer response.Body.Close()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Print("Failed to read geolocation request response\n", err)
+		return 0, 0
+	}
+
+	log.Println(string(body))
+	return 0, 0
+}
 
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -40,18 +70,18 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ipaddy := ReadUserIP(r)
+	lat, long := RequestLatLong(ipaddy)
+
 	template.Execute(w, Alaska)
 
-	ipaddy := ReadUserIP(r)
 	fmt.Fprintf(w, ipaddy)
 
+	log.Printf("Got lat, long: %f, %f", lat, long)
 }
 
 func main() {
-	env := EnvironmentVariables{FilePath: "./.env"}
 	env.Load()
-
-	log.Printf("KABOOM=%t", env.GetBoolean("KABOOM"))
 
 	http.HandleFunc("/", homePageHandler)
 
