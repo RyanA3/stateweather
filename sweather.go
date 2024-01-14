@@ -21,12 +21,9 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ipaddy := ReadUserIP(r)
-	location := RequestLocation(ipaddy)
+	location, err := RequestLocation(ipaddy)
 
 	template.Execute(w, Alaska)
-
-	fmt.Fprintf(w, ipaddy)
-
 	log.Printf("Got lat, long: %f, %f", location.latitude, location.longitude)
 }
 
