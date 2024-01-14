@@ -11,13 +11,6 @@ const port = 8000
 
 var env = EnvironmentVariables{FilePath: "./.env"}
 
-type State struct {
-	Name      string
-	ImageName string
-}
-
-var Alaska State = State{Name: "Alaska", ImageName: "alaska.jpg"}
-
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 
 	template, err := template.ParseFiles("index.html")
@@ -28,13 +21,13 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ipaddy := ReadUserIP(r)
-	lat, long := RequestLatLong(ipaddy)
+	location := RequestLocation(ipaddy)
 
 	template.Execute(w, Alaska)
 
 	fmt.Fprintf(w, ipaddy)
 
-	log.Printf("Got lat, long: %f, %f", lat, long)
+	log.Printf("Got lat, long: %f, %f", location.latitude, location.longitude)
 }
 
 func main() {
