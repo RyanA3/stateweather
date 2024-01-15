@@ -32,7 +32,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	content := PageContent{State: Alaska, Conditions: conditions}
 
 	template.Execute(w, content)
-	log.Printf("Got lat, long: %f, %f", location.latitude, location.longitude)
+	log.Printf("Got lat, long: %f, %f", location.Latitude, location.Longitude)
 	log.Printf("Got conditions: %s, temp: %f", conditions.Current.Weather[0].Description, conditions.Current.Temperature)
 }
 

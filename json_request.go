@@ -48,6 +48,8 @@ func GetJsonInStruct(url string, target interface{}) error {
 		return err
 	}
 
+	log.Println(string(data))
+
 	err = json.Unmarshal(data, target)
 	if err != nil {
 		log.Println("Faield to parse response\n", err)

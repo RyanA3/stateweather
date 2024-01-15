@@ -40,8 +40,8 @@ func RequestCurrentConditions(location *UserLocation) (Conditions, error) {
 		fmt.Sprintf(
 			"%s?lat=%f&lon=%f&exclude=%s&units=%s&appid=%s",
 			env.GetString("OPENWEATHERMAP_URL"),
-			location.latitude,
-			location.longitude,
+			location.Latitude,
+			location.Longitude,
 			exclude,
 			units,
 			env.GetString("OPENWEATHERMAP_KEY"),
