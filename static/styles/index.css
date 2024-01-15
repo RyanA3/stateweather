@@ -38,3 +38,7 @@ main {
     align-items: center;
     gap: 1em;
 }
+
+table {
+    width: 100%;
+}

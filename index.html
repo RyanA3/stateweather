@@ -16,18 +16,29 @@
             <div class="weather-container">
                 <h1>Feels Like {{.State.Name}}</h1>
                 <div class="flex-row">
-                    <h2>{{(index .Conditions.Current.Weather 0).Description}}</h2>
                     <img src="https://openweathermap.org/img/wn/{{(index .Conditions.Current.Weather 0).Icon}}@2x.png"> 
-                </div>
-                <div class="flex-row">
                     <h2>{{.Conditions.Current.Temperature}} F</h2>
-                    <p>{{.Conditions.Current.FeelsLike}} F</p>
-                </div>
-                
-                <div class="flex-row">
-                    <h2>{{.Conditions.Current.WindSpeed}}mi/h</h2>
-                    <p>{{.Conditions.Current.WindDeg}}</p>
-                </div>
+                </div>    
+
+                <table>
+                    <tr>
+                        <td>Wind Speed</td>
+                        <td>{{.Conditions.Current.WindSpeed}}mi/h</td>
+                    </tr>
+                    <tr>
+                        <td>Wind Direction</td>
+                        <td>{{.Conditions.Current.WindDeg}}deg</td>
+                    </tr>
+                    <tr>
+                        <td>Cloudiness</td>
+                        <td>{{.Conditions.Current.Clouds}}%</td>
+                    </tr>
+                    <tr>
+                        <td>Humidity</td>
+                        <td>{{.Conditions.Current.Humidity}}%</td>
+                    </tr>
+                </table>
+
             </div>
         </main>
 
