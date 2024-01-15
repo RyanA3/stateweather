@@ -22,9 +22,11 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 
 	ipaddy := ReadUserIP(r)
 	location, err := RequestLocation(ipaddy)
+	conditions, err := RequestCurrentConditions(&location)
 
 	template.Execute(w, Alaska)
 	log.Printf("Got lat, long: %f, %f", location.latitude, location.longitude)
+	log.Printf("Got conditions: %s", conditions)
 }
 
 func main() {

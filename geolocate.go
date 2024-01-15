@@ -44,7 +44,10 @@ func RequestLocation(ipaddy string) (UserLocation, error) {
 		return UserLocation{}, err
 	}
 
-	if response["latitude"] == nil || response["longitude"] == nil || response["city_geoname_id"] == nil || response["country_geoname_id"] == nil {
+	if response["latitude"] == nil ||
+		response["longitude"] == nil ||
+		response["city_geoname_id"] == nil ||
+		response["country_geoname_id"] == nil {
 		log.Print("Received null response values")
 		return UserLocation{}, errors.New("Null response values")
 	}
