@@ -6,26 +6,31 @@
         <link rel="stylesheet" href="/static/styles/index.css">
         <title>It Feels like {{.State.Name}}</title>
         <style>
-            html {
+            main {
                 background-image: url("/static/images/{{.State.ImageName}}");
             }
         </style>
     </head>
     <body>
-        <h1>Feels Like {{.State.Name}}</h1>
-        <div>
-            <h2>{{.Conditions.Current.Temperature}} F</h2>
-            <p>{{.Conditions.Current.FeelsLike}} F</p>
-        </div>
-        
-        <div>
-            <h2>{{.Conditions.Current.WindSpeed}}mi/h</h2>
-            <p>{{.Conditions.Current.WindDirection}}</p>
-        </div>
-        <!-- 
-            This is broken
-            json unmarshal is an abusive relationship
-            <img src="https://openweathermap.org/img/wn/{{.Conditions.Current.Weather.Icon}}@2x.png"> 
-        -->
+        <main>
+            <div class="weather-container">
+                <h1>Feels Like {{.State.Name}}</h1>
+                <div class="flex-row">
+                    <h2>{{(index .Conditions.Current.Weather 0).Description}}</h2>
+                    <img src="https://openweathermap.org/img/wn/{{(index .Conditions.Current.Weather 0).Icon}}@2x.png"> 
+                </div>
+                <div class="flex-row">
+                    <h2>{{.Conditions.Current.Temperature}} F</h2>
+                    <p>{{.Conditions.Current.FeelsLike}} F</p>
+                </div>
+                
+                <div class="flex-row">
+                    <h2>{{.Conditions.Current.WindSpeed}}mi/h</h2>
+                    <p>{{.Conditions.Current.WindDeg}}</p>
+                </div>
+            </div>
+        </main>
+
+        <p>Additional content here</p>
     </body>
 </html>
