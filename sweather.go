@@ -11,6 +11,11 @@ const port = 8000
 
 var env = EnvironmentVariables{FilePath: "./.env"}
 
+type PageContent struct {
+	State      State
+	Conditions Conditions
+}
+
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 
 	template, err := template.ParseFiles("index.html")
@@ -24,9 +29,11 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	location, err := RequestLocation(ipaddy)
 	conditions, err := RequestCurrentConditions(&location)
 
-	template.Execute(w, Alaska)
+	content := PageContent{State: Alaska, Conditions: conditions}
+
+	template.Execute(w, content)
 	log.Printf("Got lat, long: %f, %f", location.latitude, location.longitude)
-	log.Printf("Got conditions: %s", conditions)
+	log.Printf("Got conditions: %s, temp: %f", conditions.Current.Weather[0].Description, conditions.Current.Temperature)
 }
 
 func main() {

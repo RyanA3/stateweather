@@ -4,14 +4,28 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="/static/styles/index.css">
-        <title>It Feels like {{.Name}}</title>
+        <title>It Feels like {{.State.Name}}</title>
         <style>
             html {
-                background-image: url("/static/images/{{.ImageName}}");
+                background-image: url("/static/images/{{.State.ImageName}}");
             }
         </style>
     </head>
     <body>
-        <h1>Its Feels like...<br>{{.Name}}</h1>
+        <h1>Feels Like {{.State.Name}}</h1>
+        <div>
+            <h2>{{.Conditions.Current.Temperature}} F</h2>
+            <p>{{.Conditions.Current.FeelsLike}} F</p>
+        </div>
+        
+        <div>
+            <h2>{{.Conditions.Current.WindSpeed}}mi/h</h2>
+            <p>{{.Conditions.Current.WindDirection}}</p>
+        </div>
+        <!-- 
+            This is broken
+            json unmarshal is an abusive relationship
+            <img src="https://openweathermap.org/img/wn/{{.Conditions.Current.Weather.Icon}}@2x.png"> 
+        -->
     </body>
 </html>
