@@ -12,6 +12,10 @@ type UserLocation struct {
 	Longitude        float64 `json:"longitude"`
 	CityGeonameId    float64 `json:"city_geoname_id"`
 	CountryGeonameId float64 `json:"country_geoname_id"`
+	TimeZone         struct {
+		Name      string `json:"name"`
+		GMTOffset int    `json:"gmt_offset"`
+	}
 }
 
 func ReadUserIP(r *http.Request) string {

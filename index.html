@@ -43,5 +43,23 @@
         </main>
 
         <p>Additional content here</p>
+        <table>
+            <thead>
+                <tr>
+                    {{ range .Weather.Hourly}}
+                        <th>{{.DateTime.Hour}}</th>
+                    {{ end}}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                {{ range .Weather.Hourly}}
+                    <td>
+                        {{ .Temperature}}                 
+                    </td>
+                {{ end}}
+                </tr>
+            </tbody>
+        </table>
     </body>
 </html>

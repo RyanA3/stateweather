@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 )
 
 // An entire forcast/list of weather conditions (independent of api)
@@ -15,7 +16,7 @@ type Weather struct {
 
 // Weather conditions for a specific point in time (independent of api)
 type Conditions struct {
-	DateTime    int
+	DateTime    time.Time
 	UVIndex     float64
 	Visibility  int
 	Clouds      int
@@ -49,7 +50,7 @@ type OpenWeatherResponse struct {
 }
 
 type OpenWeatherConditions struct {
-	DateTime    int     `json:"dt"`
+	DateTime    int64   `json:"dt"`
 	Visibility  int     `json:"visibility"`
 	UVIndex     float64 `json:"uvi"`
 	Pressure    int     `json:"pressure"`
@@ -73,7 +74,7 @@ type OpenWeatherConditions struct {
 // Convert an instance of weather conditions from OpenWeatherMap api response to an instance of the generic weather conditions struct
 func (responseConditions *OpenWeatherConditions) normalize() Conditions {
 	return Conditions{
-		DateTime:    responseConditions.DateTime,
+		DateTime:    time.Unix(responseConditions.DateTime, 0),
 		Visibility:  responseConditions.Visibility,
 		UVIndex:     responseConditions.UVIndex,
 		Pressure:    responseConditions.Pressure,
