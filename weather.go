@@ -44,7 +44,8 @@ func GetWeather(location *UserLocation) (Weather, error) {
 
 // JSON Response from OpenWeatherMap
 type OpenWeatherResponse struct {
-	Current OpenWeatherConditions
+	Current OpenWeatherConditions   `json:"current"`
+	Hourly  []OpenWeatherConditions `json:"hourly"`
 }
 
 type OpenWeatherConditions struct {
@@ -95,6 +96,11 @@ func (response *OpenWeatherResponse) normalize() Weather {
 		Sunrise: response.Current.Sunrise,
 		Sunset:  response.Current.Sunset,
 		Current: response.Current.normalize(),
+	}
+
+	weather.Hourly = make([]Conditions, len(response.Hourly))
+	for i := 0; i < len(response.Hourly); i++ {
+		weather.Hourly[i] = response.Hourly[i].normalize()
 	}
 
 	return weather

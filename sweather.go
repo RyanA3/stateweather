@@ -32,6 +32,8 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	content := PageContent{State: Alaska, Weather: weather}
 
 	template.Execute(w, content)
+
+	log.Print("\n\n\nGOT WEATHER!!! YIPPEE\n", weather)
 }
 
 func main() {
