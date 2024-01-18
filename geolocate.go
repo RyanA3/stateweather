@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/patrickmn/go-cache"
 )
 
 type UserLocation struct {
@@ -36,6 +38,13 @@ func ReadUserIP(r *http.Request) string {
 func RequestLocation(ipaddy string) (UserLocation, error) {
 	location := UserLocation{}
 
+	x, found := LocationCache.Get(ipaddy)
+	if found {
+		location = x.(UserLocation)
+		log.Println("Got location from cache")
+		return location, nil
+	}
+
 	err := GetJsonInStruct(
 		fmt.Sprintf("%s?api_key=%s&ip_address=%s",
 			env.GetString("ABSTRACT_GEOLOCATION_URL"),
@@ -50,5 +59,7 @@ func RequestLocation(ipaddy string) (UserLocation, error) {
 		return UserLocation{}, err
 	}
 
+	log.Println("Got location from api, stored in cache")
+	LocationCache.Set(ipaddy, location, cache.DefaultExpiration)
 	return location, nil
 }

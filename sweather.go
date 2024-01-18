@@ -5,11 +5,17 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+	"time"
+
+	"github.com/patrickmn/go-cache"
 )
 
 const port = 8000
 
 var env = EnvironmentVariables{FilePath: "./.env"}
+
+var LocationCache = cache.New(1*time.Minute, 1*time.Minute)
+var WeatherCache = cache.New(1*time.Minute, 1*time.Minute)
 
 type PageContent struct {
 	State   State
@@ -33,7 +39,6 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 
 	template.Execute(w, content)
 
-	log.Print("\n\n\nGOT WEATHER!!! YIPPEE\n", weather)
 }
 
 func main() {

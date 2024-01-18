@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/patrickmn/go-cache"
 )
 
 // An entire forcast/list of weather conditions (independent of api)
@@ -113,6 +115,15 @@ const units string = "imperial"
 func GetOpenWeatherConditions(location *UserLocation) (OpenWeatherResponse, error) {
 
 	current := OpenWeatherResponse{}
+
+	cacheKey := fmt.Sprintf("%s,%s", location.Latitude, location.Longitude)
+	x, found := WeatherCache.Get(cacheKey)
+	if found {
+		current = x.(OpenWeatherResponse)
+		log.Println("Got weather from cache")
+		return current, nil
+	}
+
 	err := GetJsonInStruct(
 		fmt.Sprintf(
 			"%s?lat=%f&lon=%f&exclude=%s&units=%s&appid=%s",
@@ -131,5 +142,7 @@ func GetOpenWeatherConditions(location *UserLocation) (OpenWeatherResponse, erro
 		return OpenWeatherResponse{}, err
 	}
 
+	log.Println("Got weather from api, added to cache")
+	WeatherCache.Set(cacheKey, current, cache.DefaultExpiration)
 	return current, nil
 }
