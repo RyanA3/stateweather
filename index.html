@@ -44,10 +44,12 @@
         </main>
 
         <div class="forecast">
-            <h2>Forecast</h2>
+            <h2>Hourly Forecast</h2>
             
             <div class="forecast-chart-container">
-                <canvas id="forecastChart" style="width:30%;"></canvas> 
+                <canvas id="temperatureChart"></canvas> 
+                <canvas id="percentChart"></canvas>
+                <canvas id="windChart"></canvas>
             </div>
         </div>
         <script>
@@ -60,19 +62,98 @@
                     {{.Temperature}},
                 {{ end}}]
 
-                const forecastChart = new Chart("forecastChart", {
+                const dewPoints = [{{ range .Weather.Hourly}}
+                    {{.DewPoint}},
+                {{ end}}]
+
+                const clouds = [{{ range .Weather.Hourly}}
+                    {{.Clouds}},
+                {{ end}}]
+
+                const humidity = [{{ range .Weather.Hourly}}
+                    {{.Humidity}},
+                {{ end}}]
+
+                const visibility = [{{ range .Weather.Hourly}}
+                    {{.Visibility}},
+                {{ end}}]
+
+                const windSpeed = [{{ range .Weather.Hourly}}
+                    {{.WindSpeed}},
+                {{ end}}]
+
+                const windGust = [{{ range .Weather.Hourly}}
+                    {{.WindGust}},
+                {{ end}}]
+
+                const temperatureChart = new Chart("temperatureChart", {
                     type: "line",
                     data: {
                         labels: hours,
                         datasets: [{
                             label: "Temperature",
                             fill: false,
-                            backgroundColor: "rgb(200, 200, 200)",
+                            backgroundColor: "rgb(0, 0, 200)",
                             borderColor: "rgb(0, 0, 150)",
-                            data: temps
+                            data: temps,
+                            pointHitRadius: 10,
+                        },
+                        {
+                            label:"Dew Point",
+                            fill: false,
+                            backgroundColor: "rgb(0, 200, 0)",
+                            borderColor: "rgb(0, 150, 0)",
+                            data: dewPoints,
+                            pointHitRadius: 10,
                         }]
                     }
                 }) 
+
+                const percentChart = new Chart("percentChart", {
+                    type: "line",
+                    data: {
+                        labels: hours,
+                        datasets: [{
+                            label: "Humidity",
+                            fill: false,
+                            backgroundColor: "rgb(0, 0, 255)",
+                            borderColor: "rgb(0,0,200)",
+                            data: humidity,
+                            pointHitRadius: 10,
+                        },
+                        {
+                            label: "Cloudiness",
+                            fill: false,
+                            backgroundColor: "rgb(150, 150, 150)",
+                            borderColor: "rgb(100, 100, 100)",
+                            data: clouds,
+                            pointHitRadius: 10,
+                        }]
+                    }
+                })
+
+                const windChart = new Chart("windChart", {
+                    type: "line",
+                    data: {
+                        labels: hours,
+                        datasets: [{
+                            label: "Wind Speed",
+                            fill: false,
+                            backgroundColor: "rgb(200, 200, 200)",
+                            borderColor: "rgb(150, 150, 150)",
+                            data: windSpeed,
+                            pointHitRadius: 10,
+                        },
+                        {
+                            label: "Wind Gust",
+                            fill: false,
+                            backgroundColor: "rgb(200, 0, 0)",
+                            borderColor: "rgb(150, 0 ,0)",
+                            data: windGust,
+                            pointHitRadius: 10,
+                        }]
+                    }
+                })
             })
 
         </script>
