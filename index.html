@@ -10,6 +10,7 @@
                 background-image: url("/static/images/{{.State.ImageName}}");
             }
         </style>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js" ></script> 
     </head>
     <body>
         <main>
@@ -42,24 +43,38 @@
             </div>
         </main>
 
-        <p>Additional content here</p>
-        <table>
-            <thead>
-                <tr>
-                    {{ range .Weather.Hourly}}
-                        <th>{{.DateTime.Hour}}</th>
-                    {{ end}}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                {{ range .Weather.Hourly}}
-                    <td>
-                        {{ .Temperature}}                 
-                    </td>
-                {{ end}}
-                </tr>
-            </tbody>
-        </table>
+        <div class="forecast">
+            <h2>Forecast</h2>
+            
+            <div class="forecast-chart-container">
+                <canvas id="forecastChart" style="width:30%;"></canvas> 
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const hours = [{{ range .Weather.Hourly}}
+                    {{.DateTime.Format "3"}},
+                {{ end}}]
+
+                const temps = [{{ range .Weather.Hourly}}
+                    {{.Temperature}},
+                {{ end}}]
+
+                const forecastChart = new Chart("forecastChart", {
+                    type: "line",
+                    data: {
+                        labels: hours,
+                        datasets: [{
+                            label: "Temperature",
+                            fill: false,
+                            backgroundColor: "rgb(200, 200, 200)",
+                            borderColor: "rgb(0, 0, 150)",
+                            data: temps
+                        }]
+                    }
+                }) 
+            })
+
+        </script>
     </body>
 </html>
