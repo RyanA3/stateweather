@@ -14,8 +14,8 @@ const port = 8000
 
 var env = EnvironmentVariables{FilePath: "./.env"}
 
-var LocationCache = cache.New(1*time.Minute, 1*time.Minute)
-var WeatherCache = cache.New(1*time.Minute, 1*time.Minute)
+var LocationCache = cache.New(1*time.Minute, 5*time.Minute)
+var WeatherCache = cache.New(1*time.Minute, 5*time.Minute)
 
 type PageContent struct {
 	State   State
