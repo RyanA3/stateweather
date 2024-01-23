@@ -55,4 +55,6 @@ func (state *State) CompareWeather(conditions Conditions, season Season) float64
 	return ntemp
 }
 
-var Alaska State = State{Name: "Alaska", ImageName: "alaska.jpg"}
+var States = [...]State{
+	{Name: "Alaska", ImageName: "alaska.jpg"},
+}

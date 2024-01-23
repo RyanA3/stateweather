@@ -35,7 +35,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	location, err := RequestLocation(ipaddy)
 	weather, err := GetWeather(&location)
 
-	content := PageContent{State: Alaska, Weather: weather}
+	content := PageContent{State: States[0], Weather: weather}
 
 	template.Execute(w, content)
 
